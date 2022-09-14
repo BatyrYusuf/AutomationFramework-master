@@ -26,7 +26,6 @@ public class FrameworkInitialize {
                     ChromeOptions capability = new ChromeOptions();
                     capability.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
                     capability.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
-                    capability.addArguments("--headless", "--window-size=1920,629");
                     driver = new ChromeDriver(capability);
                     break;
                 case Safari:
