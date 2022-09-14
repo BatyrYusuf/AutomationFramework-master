@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="automation-framework" />
         <module name="AutomationFramework" />
+        <module name="AutomationFramework-master" />
       </profile>
     </annotationProcessing>
   </component>

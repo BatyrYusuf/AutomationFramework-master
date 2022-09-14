@@ -147,8 +147,8 @@
     <distributionManagement>
         <repository>
             <id>github</id>
-            <name>GitHub CerenSuu Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/CerenSuu/AutomationFramework</url>
+            <name>GitHub BatyrYusuf Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/BatyrYusuf/AutomationFramework-master</url>
         </repository>
     </distributionManagement>
 
