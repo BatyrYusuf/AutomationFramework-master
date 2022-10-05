@@ -13,40 +13,43 @@ import java.io.IOException;
 
 
 public class FrameworkInitialize {
-
     public FrameworkInitialize() {
     }
 
-    public static WebDriver InitializeBrowser (BrowserType browserType){
+    public static WebDriver InitializeBrowser(BrowserType browserType) {
         WebDriver driver = null;
         if (driver == null) {
             switch (browserType) {
                 case Chrome:
                     WebDriverManager.chromedriver().setup();
                     ChromeOptions capability = new ChromeOptions();
-                    capability.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-                    capability.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
+                    capability.setCapability("acceptSslCerts", true);
+                    capability.setCapability("acceptInsecureCerts", true);
                     driver = new ChromeDriver(capability);
                     break;
                 case Safari:
-                    if (!System.getProperty("os.name").toLowerCase().contains("mac"))
+                    if (!System.getProperty("os.name").toLowerCase().contains("mac")) {
                         throw new WebDriverException("Your OS doesn't support Safari");
+                    }
+
                     WebDriverManager.getInstance(SafariDriver.class).setup();
                     driver = new SafariDriver();
                     break;
                 case IE:
-                    if (!System.getProperty("os.name").toLowerCase().contains("windows"))
+                    if (!System.getProperty("os.name").toLowerCase().contains("windows")) {
                         throw new WebDriverException("Your OS doesn't support Internet Explorer");
+                    }
+
                     WebDriverManager.iedriver().setup();
                     driver = new InternetExplorerDriver();
                     break;
                 case Firefox:
                     WebDriverManager.firefoxdriver().setup();
                     driver = new FirefoxDriver();
-                    break;
             }
         }
-        LocalDriverContext.setDriver(driver);
-        return driver;
+
+        LocalDriverContext.setDriver((WebDriver)driver);
+        return (WebDriver)driver;
     }
 }

@@ -33,26 +33,29 @@ public class DriverContext {
     public void waitFor(long second) {
         try {
             TimeUnit.SECONDS.sleep(second);
-        } catch (Exception e) {
+        } catch (Exception var4) {
         }
+
     }
 
     public void waitForPageToLoad() {
         try {
-            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30));
-            JavascriptExecutor jsExecutor = (JavascriptExecutor) LocalDriverContext.getDriver();
-            ExpectedCondition<Boolean> jsLoad = webDriver -> ((JavascriptExecutor) LocalDriverContext.getDriver())
-                    .executeScript("return document.readyState").toString().equals("complete");
-            //Get JS Ready
-            boolean jsReady = jsExecutor.executeScript("return document.readyState").toString().equals("complete");
-            if (!jsReady)
+            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30L));
+            JavascriptExecutor jsExecutor = (JavascriptExecutor)LocalDriverContext.getDriver();
+            ExpectedCondition<Boolean> jsLoad = (webDriver) -> {
+                return ((JavascriptExecutor)LocalDriverContext.getDriver()).executeScript("return document.readyState", new Object[0]).toString().equals("complete");
+            };
+            boolean jsReady = jsExecutor.executeScript("return document.readyState", new Object[0]).toString().equals("complete");
+            if (!jsReady) {
                 wait.until(jsLoad);
-            else
+            } else {
                 this.driverContextLogger.info("The page has been loaded successfully!");
-        } catch (Throwable var6) {
+            }
+        } catch (Throwable var5) {
             this.driverContextLogger.error("The page can not been loaded!");
             Assert.fail("The page can not been loaded!");
         }
+
     }
 
     public String getCookieName(String cookieName) {
@@ -60,14 +63,15 @@ public class DriverContext {
             String cookie = LocalDriverContext.getDriver().manage().getCookieNamed(cookieName).toString();
             String[] cookies = cookie.split(" ");
             cookie = cookies[0];
-            Pattern pat = Pattern.compile("(?<="+cookieName+"=)(.*?)(?=;)");
+            Pattern pat = Pattern.compile("(?<=" + cookieName + "=)(.*?)(?=;)");
             Matcher m = pat.matcher(cookie);
             if (m.find()) {
                 cookie = m.group(0);
-            }else {
+            } else {
                 this.driverContextLogger.error("The cookie is empty!");
                 Assert.fail("The cookie is empty!");
             }
+
             return cookie;
         } catch (Throwable var6) {
             this.driverContextLogger.error("The cookie can not be taken!");
@@ -78,17 +82,18 @@ public class DriverContext {
 
     public void waitUntilElementVisible(WebElement elementFindBy) {
         try {
-            WebDriverWait wait= new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30));
+            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30L));
             wait.until(ExpectedConditions.visibilityOf(elementFindBy));
         } catch (Throwable var3) {
             this.driverContextLogger.error("The element: " + elementFindBy + " cannot be displayed!");
             Assert.fail("The element: " + elementFindBy + " cannot be displayed!");
         }
+
     }
 
     public void waitUntilElementTextVisible(WebElement elementFindBy, String text) {
         try {
-            WebDriverWait wait= new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30));
+            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30L));
             wait.until(ExpectedConditions.textToBePresentInElement(elementFindBy, text));
         } catch (Throwable var4) {
             this.driverContextLogger.error("The element: " + elementFindBy + " cannot be displayed! The expected text: " + text);
@@ -99,8 +104,8 @@ public class DriverContext {
 
     public boolean waitUntilTextDisplayedEqualsIgnoreCaseByLocator(By locator, String text) {
         try {
-            WebDriverWait wait= new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30));
-            return (Boolean) wait.until(this.checkLocatorTextEqualsIgnoreCase(locator, text));
+            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30L));
+            return (Boolean)wait.until(this.checkLocatorTextEqualsIgnoreCase(locator, text));
         } catch (Throwable var4) {
             this.driverContextLogger.error("The element: " + locator + " The expected text: " + text + " is not equal!");
             Assert.fail("The element: " + locator + " The expected text: " + text + " is not equal!");
@@ -110,8 +115,8 @@ public class DriverContext {
 
     public boolean waitUntilTextDisplayedContainsByLocator(By locator, String text) {
         try {
-            WebDriverWait wait= new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30));
-            return (Boolean) wait.until(this.checkLocatorTextContains(locator, text));
+            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30L));
+            return (Boolean)wait.until(this.checkLocatorTextContains(locator, text));
         } catch (Throwable var4) {
             this.driverContextLogger.error("The element: " + locator + " The expected text: " + text + " has not contain!");
             Assert.fail("The element: " + locator + " The expected text: " + text + " has not contain!");
@@ -153,7 +158,7 @@ public class DriverContext {
 
     public void waitUntilElementEnabled(By locator) {
         try {
-            WebDriverWait wait= new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30));
+            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30L));
             wait.until((webDriver) -> {
                 return webDriver.findElement(locator).isEnabled();
             });
@@ -166,7 +171,7 @@ public class DriverContext {
 
     public void waitUntilPresenceOfElementByLocator(By locator) {
         try {
-            WebDriverWait wait= new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30));
+            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30L));
             wait.until(ExpectedConditions.presenceOfElementLocated(locator));
         } catch (Throwable var3) {
             this.driverContextLogger.error("The element: " + locator + " can not be found in DOM!");
@@ -177,7 +182,7 @@ public class DriverContext {
 
     public void waitUntilElementClickable(WebElement elementFindBy) {
         try {
-            WebDriverWait wait= new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30));
+            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30L));
             wait.until(ExpectedConditions.elementToBeClickable(elementFindBy));
         } catch (Throwable var3) {
             this.driverContextLogger.error("The element: " + elementFindBy + " is not clickable!");
@@ -188,8 +193,8 @@ public class DriverContext {
 
     public boolean waitUntilUrlContains(String expectedUrl) {
         try {
-            WebDriverWait wait= new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30));
-            return (Boolean) wait.until(ExpectedConditions.urlContains(expectedUrl));
+            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30L));
+            return (Boolean)wait.until(ExpectedConditions.urlContains(expectedUrl));
         } catch (Throwable var3) {
             this.driverContextLogger.error("The expected URL: " + expectedUrl + " The current URL: " + LocalDriverContext.getDriver().getCurrentUrl() + "!");
             Assert.fail("The expected URL: " + expectedUrl + " The current URL: " + LocalDriverContext.getDriver().getCurrentUrl() + "!");
@@ -199,7 +204,7 @@ public class DriverContext {
 
     public void waitUntilFrameToBeAvailableAndSwitchToItByWebelement(WebElement webElement) {
         try {
-            WebDriverWait wait= new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30));
+            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30L));
             wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(webElement));
         } catch (Throwable var3) {
             this.driverContextLogger.error("The frame can not be found according to the expected element: " + webElement + "!");
@@ -210,7 +215,7 @@ public class DriverContext {
 
     public void waitUntilFrameToBeAvailableAndSwitchToItByIndex(int frameIndex) {
         try {
-            WebDriverWait wait= new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30));
+            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30L));
             wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(frameIndex));
         } catch (Throwable var3) {
             this.driverContextLogger.error("The frame can not be found according to the expected index: " + frameIndex + "!");
@@ -221,7 +226,7 @@ public class DriverContext {
 
     public void waitUntilElementClickableWithExactTime(WebElement element, int exactTimeInSecond) {
         try {
-            WebDriverWait wait= new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30));
+            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30L));
             wait.until(ExpectedConditions.elementToBeClickable(element));
         } catch (Throwable var4) {
             this.driverContextLogger.error("The element: " + element + " can not be clickable in this time: " + exactTimeInSecond + "!");
@@ -232,7 +237,7 @@ public class DriverContext {
 
     public void waitUntilVisibleElementWithExactTime(WebElement element, int exactTimeInSecond) {
         try {
-            WebDriverWait wait= new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30));
+            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30L));
             wait.until(ExpectedConditions.visibilityOf(element));
         } catch (Throwable var4) {
             this.driverContextLogger.error("The element: " + element + " is not visible in this time: " + exactTimeInSecond + "!");
@@ -243,8 +248,8 @@ public class DriverContext {
 
     public boolean waitUntilElementAttributeContainsValue(WebElement element, String attribute, String expectedValue) {
         try {
-            WebDriverWait wait= new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30));
-            return (Boolean) wait.until(ExpectedConditions.attributeContains(element, attribute, expectedValue));
+            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30L));
+            return (Boolean)wait.until(ExpectedConditions.attributeContains(element, attribute, expectedValue));
         } catch (Throwable var5) {
             this.driverContextLogger.error("The expected value: " + expectedValue + " The element: " + element + "The attribute: " + attribute + " can not be validated!");
             Assert.fail("The expected value: " + expectedValue + " The element: " + element + "The attribute: " + attribute + " can not be validated!");
@@ -254,7 +259,7 @@ public class DriverContext {
 
     public void waitUntilElementInVisible(WebElement elementFindBy) {
         try {
-            WebDriverWait wait= new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30));
+            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30L));
             wait.until(ExpectedConditions.invisibilityOf(elementFindBy));
         } catch (Throwable var3) {
             this.driverContextLogger.error("The element: " + elementFindBy + " is visible!");
@@ -265,7 +270,7 @@ public class DriverContext {
 
     public void waitUntilSelectOptionsPopulated(Select select) {
         try {
-            WebDriverWait wait= new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30));
+            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30L));
             wait.until((input) -> {
                 List<WebElement> options = select.getOptions();
                 return options.size() >= 1 ? select : null;
@@ -282,14 +287,15 @@ public class DriverContext {
             Set<String> allTabs = LocalDriverContext.getDriver().getWindowHandles();
             Iterator var3 = allTabs.iterator();
 
-            while (var3.hasNext()) {
-                String eachTab = (String) var3.next();
+            while(var3.hasNext()) {
+                String eachTab = (String)var3.next();
                 LocalDriverContext.getDriver().switchTo().window(eachTab);
                 if (LocalDriverContext.getDriver().getTitle().contains(title)) {
                     break;
                 }
             }
-            WebDriverWait wait= new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30));
+
+            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30L));
             wait.until(ExpectedConditions.titleContains(title));
         } catch (Throwable var5) {
             this.driverContextLogger.error("The title: " + title + " can not be found in opened tabs!");
@@ -301,9 +307,9 @@ public class DriverContext {
     public void openNewTabAndNavigateToURL(String url) {
         try {
             LocalDriverContext.getDriver().switchTo().newWindow(WindowType.TAB).navigate().to(url);
-            WebDriverWait wait= new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30));
+            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30L));
             wait.until(ExpectedConditions.urlContains(url));
-        } catch (Throwable var5) {
+        } catch (Throwable var3) {
             this.driverContextLogger.error("The url: " + url + " can not be found in opened tabs!");
             Assert.fail("The url: " + url + " can not be found in opened tabs!");
         }
@@ -317,13 +323,13 @@ public class DriverContext {
             Set<String> handles = LocalDriverContext.getDriver().getWindowHandles();
             Iterator var2 = handles.iterator();
 
-            while (var2.hasNext()) {
-                String window = (String) var2.next();
+            while(var2.hasNext()) {
+                String window = (String)var2.next();
                 this.driverContextLogger.info("Window : " + window);
                 this.windowList.add(this.windowList.size(), window);
             }
 
-            LocalDriverContext.getDriver().switchTo().window((String) this.windowList.get(this.windowList.size() - 1));
+            LocalDriverContext.getDriver().switchTo().window((String)this.windowList.get(this.windowList.size() - 1));
         } catch (Throwable var4) {
             this.driverContextLogger.error("The new page can not be switched to!");
             Assert.fail("The new page can not be switched to!");
@@ -345,16 +351,15 @@ public class DriverContext {
         try {
             Iterator tabIterator = LocalDriverContext.getDriver().getWindowHandles().iterator();
 
-            do {
-                if (!tabIterator.hasNext()) {
-                    return false;
-                }
-
-                String eachTab = (String) tabIterator.next();
+            while(tabIterator.hasNext()) {
+                String eachTab = (String)tabIterator.next();
                 LocalDriverContext.getDriver().switchTo().window(eachTab);
-            } while (!LocalDriverContext.getDriver().getCurrentUrl().trim().equalsIgnoreCase(url.trim()));
+                if (LocalDriverContext.getDriver().getCurrentUrl().trim().equalsIgnoreCase(url.trim())) {
+                    return true;
+                }
+            }
 
-            return true;
+            return false;
         } catch (Throwable var4) {
             this.driverContextLogger.error("The URL: " + url + " can not be displayed!");
             Assert.fail("The URL: " + url + " can not be displayed!");
@@ -364,7 +369,7 @@ public class DriverContext {
 
     public void findAndScrollWebElement(WebElement element) {
         try {
-            JavascriptExecutor jsExecutor = (JavascriptExecutor) LocalDriverContext.getDriver();
+            JavascriptExecutor jsExecutor = (JavascriptExecutor)LocalDriverContext.getDriver();
             jsExecutor.executeScript("arguments[0].scrollIntoView(true);", new Object[]{element});
         } catch (Throwable var3) {
             this.driverContextLogger.error("The element: " + element + " can not be found!");
@@ -375,7 +380,7 @@ public class DriverContext {
 
     public void scrollInWindowByPixels(int x, int y) {
         try {
-            JavascriptExecutor jsExecutor = (JavascriptExecutor) LocalDriverContext.getDriver();
+            JavascriptExecutor jsExecutor = (JavascriptExecutor)LocalDriverContext.getDriver();
             jsExecutor.executeScript("window.scrollBy(" + x + "," + y + ")", new Object[0]);
         } catch (Throwable var4) {
             this.driverContextLogger.error("The scrolling can not be done!");
@@ -408,8 +413,8 @@ public class DriverContext {
 
     public List<WebElement> getListOfElement(By locator, int timeOutInSeconds) {
         try {
-            WebDriverWait wait= new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30));
-            List<WebElement> webElementList = (List) wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
+            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30L));
+            List<WebElement> webElementList = (List)wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
             return webElementList;
         } catch (Throwable var5) {
             this.driverContextLogger.error("The element: " + locator + " can not be gotten as a list!");
@@ -420,11 +425,11 @@ public class DriverContext {
 
     public List<WebElement> presenceOfAllWait(By locator, int seconds) {
         try {
-            WebDriverWait wait= new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(seconds));
-            return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
-        } catch (Exception ex) {
-            this.driverContextLogger.error("The element: "+locator+" cannot be found! The reason: "+ex.getMessage());
-            Assert.fail("The element: "+locator+" cannot be found! The reason: "+ex.getMessage());
+            WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds((long)seconds));
+            return (List)wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
+        } catch (Exception var4) {
+            this.driverContextLogger.error("The element: " + locator + " cannot be found! The reason: " + var4.getMessage());
+            Assert.fail("The element: " + locator + " cannot be found! The reason: " + var4.getMessage());
             return null;
         }
     }
@@ -435,14 +440,16 @@ public class DriverContext {
         try {
             element = LocalDriverContext.getDriver().findElement(locator);
         } catch (Throwable var4) {
-            this.driverContextLogger.error("The locator: "+locator+" can not be found!");
-            Assert.fail("The locator: "+locator+" can not be found!");
+            this.driverContextLogger.error("The locator: " + locator + " can not be found!");
+            Assert.fail("The locator: " + locator + " can not be found!");
         }
+
         return element;
     }
 
     public boolean isElementPresent(By by, int timeOutInSeconds) {
-        WebDriverWait wait= new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30));
+        WebDriverWait wait = new WebDriverWait(LocalDriverContext.getDriver(), Duration.ofSeconds(30L));
+
         try {
             wait.until(ExpectedConditions.presenceOfElementLocated(by));
             return true;
@@ -476,12 +483,13 @@ public class DriverContext {
 
     public void clickWebElementJS(WebElement element) {
         try {
-            JavascriptExecutor executor = (JavascriptExecutor) LocalDriverContext.getDriver();
+            JavascriptExecutor executor = (JavascriptExecutor)LocalDriverContext.getDriver();
             executor.executeScript("arguments[0].click();", new Object[]{element});
         } catch (Throwable var3) {
             this.driverContextLogger.error("The element: " + element + " can not be clicked!");
             Assert.fail("The element: " + element + " can not be clicked!");
         }
+
     }
 
     public void clickAndHold(WebElement element) {
@@ -492,20 +500,23 @@ public class DriverContext {
             this.driverContextLogger.error("The element: " + element + " can not be holded!");
             Assert.fail("The element: " + element + " can not be holded!");
         }
+
     }
 
-    public String generateRandom(String characters, int length){
+    public String generateRandom(String characters, int length) {
         try {
             StringBuilder sb = new StringBuilder();
             Random random = new Random();
-            for(int i = 0; i < length; i++) {
+
+            for(int i = 0; i < length; ++i) {
                 int index = random.nextInt(characters.length());
                 char randomChar = characters.charAt(index);
                 sb.append(randomChar);
             }
+
             String randomString = sb.toString();
             return randomString;
-        } catch (Exception e) {
+        } catch (Exception var8) {
             Assert.fail("Random string can not be generated.");
             return null;
         }
@@ -513,20 +524,21 @@ public class DriverContext {
 
     public Integer generateRandomInteger(int min, int max) {
         try {
-            int random_int = (int)Math.floor(Math.random()*(max-min+1)+min);
+            int random_int = (int)Math.floor(Math.random() * (double)(max - min + 1) + (double)min);
             return random_int;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (Exception var4) {
+            throw new RuntimeException(var4);
         }
     }
 
     public void deleteTextbox(WebElement webElement) {
         try {
-            webElement.sendKeys(Keys.CONTROL+"a");
-            webElement.sendKeys(Keys.DELETE);
-        } catch (Exception e) {
-            driverContextLogger.error("The text box can not be deleted.");
+            webElement.sendKeys(new CharSequence[]{Keys.CONTROL + "a"});
+            webElement.sendKeys(new CharSequence[]{Keys.DELETE});
+        } catch (Exception var3) {
+            this.driverContextLogger.error("The text box can not be deleted.");
             Assert.fail("The text box can not be deleted.");
         }
+
     }
 }
